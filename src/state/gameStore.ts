@@ -1,17 +1,19 @@
 import { create } from 'zustand'
 
-export type Phase = 'day' | 'evening' | 'night'
+export type Phase = 'morning' | 'day' | 'evening' | 'night'
 export type Speed = 1 | 2 | 4
 
 const DAY_START_HOUR = 9
 const MIN_PER_HOUR = 60
+const FULL_DAY_LEN = 24 * MIN_PER_HOUR
+
 const DAY_PHASE_LEN = 9 * MIN_PER_HOUR
 const EVENING_PHASE_LEN = 4 * MIN_PER_HOUR
 const NIGHT_PHASE_LEN = 8 * MIN_PER_HOUR
-const FULL_DAY_LEN = DAY_PHASE_LEN + EVENING_PHASE_LEN + NIGHT_PHASE_LEN
 
 const DAY_END_AT = DAY_PHASE_LEN
-const EVENING_END_AT = DAY_PHASE_LEN + EVENING_PHASE_LEN
+const EVENING_END_AT = DAY_END_AT + EVENING_PHASE_LEN
+const NIGHT_END_AT = EVENING_END_AT + NIGHT_PHASE_LEN
 
 export type GameState = {
   elapsedMinutes: number
@@ -31,7 +33,13 @@ export const useGameStore = create<GameState>((set) => ({
   setSpeed: (speed) => set({ speed }),
 }))
 
-export type Clock = { day: number; hour: number; minute: number; phase: Phase }
+export type Clock = {
+  day: number
+  hour: number
+  minute: number
+  hourFloat: number
+  phase: Phase
+}
 
 export function deriveClock(elapsedMinutes: number): Clock {
   const day = Math.floor(elapsedMinutes / FULL_DAY_LEN) + 1
@@ -40,10 +48,12 @@ export function deriveClock(elapsedMinutes: number): Clock {
   let phase: Phase
   if (within < DAY_END_AT) phase = 'day'
   else if (within < EVENING_END_AT) phase = 'evening'
-  else phase = 'night'
+  else if (within < NIGHT_END_AT) phase = 'night'
+  else phase = 'morning'
 
   const hour = (DAY_START_HOUR + Math.floor(within / MIN_PER_HOUR)) % 24
   const minute = Math.floor(within % MIN_PER_HOUR)
+  const hourFloat = (DAY_START_HOUR + within / MIN_PER_HOUR) % 24
 
-  return { day, hour, minute, phase }
+  return { day, hour, minute, hourFloat, phase }
 }

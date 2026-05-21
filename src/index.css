@@ -76,6 +76,11 @@ body {
   letter-spacing: 0.2em;
 }
 
+.hud-phase.phase-morning {
+  background: #1c2530;
+  color: #9cb0c8;
+}
+
 .hud-phase.phase-day {
   background: #2a2f3a;
   color: #c8c4b3;

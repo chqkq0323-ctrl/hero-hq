@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { Application } from 'pixi.js'
 import { buildScene, type Scene } from './scene'
-import { useGameStore } from '../state/gameStore'
-import { paletteAt } from './palette'
+import { deriveClock, useGameStore } from '../state/gameStore'
+import { paletteAtHour } from './palette'
 
 const GAME_MIN_PER_REAL_SEC = 6
-const FULL_DAY = 21 * 60
 
 export function CityMap() {
   const hostRef = useRef<HTMLDivElement>(null)
@@ -33,7 +32,7 @@ export function CityMap() {
       }
       host.appendChild(a.canvas)
       const s = buildScene(a)
-      s.applyPalette(paletteAt(useGameStore.getState().elapsedMinutes % FULL_DAY))
+      s.applyPalette(paletteAtHour(deriveClock(useGameStore.getState().elapsedMinutes).hourFloat))
       app = a
       scene = s
 
@@ -42,12 +41,11 @@ export function CityMap() {
         if (!state.isPaused) {
           const seconds = ticker.deltaMS / 1000
           if (seconds > 0) {
-            const minutes = seconds * GAME_MIN_PER_REAL_SEC * state.speed
-            state.advance(minutes)
+            state.advance(seconds * GAME_MIN_PER_REAL_SEC * state.speed)
           }
         }
-        const minutesInDay = useGameStore.getState().elapsedMinutes % FULL_DAY
-        s.applyPalette(paletteAt(minutesInDay))
+        const { hourFloat } = deriveClock(useGameStore.getState().elapsedMinutes)
+        s.applyPalette(paletteAtHour(hourFloat))
       })
     }
 
