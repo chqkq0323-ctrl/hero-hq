@@ -1,0 +1,59 @@
+:root {
+  color-scheme: dark;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #0b0b0d;
+  color: #d6d6d2;
+}
+
+.hq {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hq h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  /* compensate for trailing letter-spacing pushing text off-center */
+  padding-left: 0.4em;
+  color: #f2f2ee;
+}
+
+.hq .day {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.3em;
+  color: #7a7a72;
+}
+
+.hq .line {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: #b8b8b0;
+}
