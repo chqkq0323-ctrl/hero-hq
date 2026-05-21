@@ -6,10 +6,12 @@ export type PaletteSample = {
   tintAlpha: number
 }
 
-const NOON_SKY = 0x2c3038
+const NOON_SKY = 0x8a7e6a
 const MIDNIGHT_SKY = 0x05060f
-const OVERLAY_TINT = 0x070824
-const PEAK_OVERLAY_ALPHA = 0.45
+const DAY_TINT = 0xfce9b8
+const DAY_TINT_ALPHA = 0.18
+const NIGHT_TINT = 0x070824
+const NIGHT_TINT_ALPHA = 0.45
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t
@@ -46,8 +48,8 @@ export function paletteAtHour(hourFloat: number): PaletteSample {
   const d = darkness(hourFloat)
   return {
     sky: lerpColor(NOON_SKY, MIDNIGHT_SKY, d),
-    tint: OVERLAY_TINT,
-    tintAlpha: d * PEAK_OVERLAY_ALPHA,
+    tint: lerpColor(DAY_TINT, NIGHT_TINT, d),
+    tintAlpha: lerp(DAY_TINT_ALPHA, NIGHT_TINT_ALPHA, d),
   }
 }
 
