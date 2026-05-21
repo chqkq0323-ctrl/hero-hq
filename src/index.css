@@ -21,39 +21,132 @@ body,
 body {
   background: #0b0b0d;
   color: #d6d6d2;
+  overflow: hidden;
 }
 
-.hq {
-  min-height: 100vh;
+.app {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.hud {
+  flex: 0 0 auto;
+  height: 44px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  text-align: center;
-  padding: 2rem;
+  padding: 0 1rem;
+  background: #07080c;
+  border-bottom: 1px solid #1b1d24;
+  font-size: 0.85rem;
 }
 
-.hq h1 {
-  margin: 0;
-  font-size: clamp(2rem, 6vw, 4rem);
+.hud-title {
   font-weight: 700;
-  letter-spacing: 0.4em;
-  /* compensate for trailing letter-spacing pushing text off-center */
-  padding-left: 0.4em;
-  color: #f2f2ee;
+  letter-spacing: 0.35em;
+  color: #d8d6cf;
 }
 
-.hq .day {
-  margin: 0;
-  font-size: 0.95rem;
-  letter-spacing: 0.3em;
-  color: #7a7a72;
-}
-
-.hq .line {
-  margin: 0;
-  font-size: 1.05rem;
+.hud-center {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #b8b6ad;
   letter-spacing: 0.05em;
-  color: #b8b8b0;
+}
+
+.hud-day {
+  color: #f0eee5;
+}
+
+.hud-time {
+  font-variant-numeric: tabular-nums;
+  color: #f0eee5;
+}
+
+.hud-sep {
+  opacity: 0.4;
+}
+
+.hud-phase {
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+}
+
+.hud-phase.phase-day {
+  background: #2a2f3a;
+  color: #c8c4b3;
+}
+
+.hud-phase.phase-evening {
+  background: #4a2b1c;
+  color: #f0c499;
+}
+
+.hud-phase.phase-night {
+  background: #1a1830;
+  color: #a8a4d8;
+}
+
+.stage {
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.city-map {
+  position: absolute;
+  inset: 0;
+}
+
+.city-map canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.time-controls {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.4rem;
+  background: rgba(7, 8, 12, 0.85);
+  border: 1px solid #1b1d24;
+  padding: 0.35rem;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+
+.tc-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #b8b6ad;
+  font-family: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.tc-btn:hover {
+  color: #f0eee5;
+  background: #14161e;
+}
+
+.tc-btn.active {
+  background: #2a2f3a;
+  color: #f0eee5;
+  border-color: #3a3f4a;
+}
+
+.tc-btn:focus-visible {
+  outline: 1px solid #5a6070;
+  outline-offset: 1px;
 }
