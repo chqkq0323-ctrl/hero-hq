@@ -29,9 +29,17 @@ function lerpColor(a: number, b: number, t: number): number {
   )
 }
 
+function smoothstep(edge0: number, edge1: number, x: number): number {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)))
+  return t * t * (3 - 2 * t)
+}
+
 function darkness(hourFloat: number): number {
-  const angle = ((hourFloat - 12) / 24) * Math.PI * 2
-  return 0.5 - 0.5 * Math.cos(angle)
+  const h = ((hourFloat % 24) + 24) % 24
+  if (h >= 7 && h <= 17) return 0
+  if (h > 17 && h < 22) return smoothstep(17, 22, h)
+  if (h >= 22 || h < 5) return 1
+  return 1 - smoothstep(5, 7, h)
 }
 
 export function paletteAtHour(hourFloat: number): PaletteSample {
