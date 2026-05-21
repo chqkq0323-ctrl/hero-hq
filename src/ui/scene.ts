@@ -1,11 +1,10 @@
 import { Application, Container, Graphics } from 'pixi.js'
 import { DISTRICTS, type District } from '../game/entities/district'
 import { TILE_HEIGHT, TILE_WIDTH, diamondPath, tileToScreen } from './iso'
-import { paletteFor } from './palette'
-import type { Phase } from '../state/gameStore'
+import type { PaletteSample } from './palette'
 
 export type Scene = {
-  setPhase: (phase: Phase) => void
+  applyPalette: (sample: PaletteSample) => void
   resize: (width: number, height: number) => void
   destroy: () => void
 }
@@ -22,20 +21,25 @@ export function buildScene(app: Application): Scene {
 
   centerWorld(app, world)
 
-  const setPhase = (phase: Phase) => {
-    const p = paletteFor(phase)
-    app.renderer.background.color = p.sky
+  let lastTintKey = ''
+
+  const applyPalette = (sample: PaletteSample) => {
+    app.renderer.background.color = sample.sky
+    const key = `${sample.tint}|${sample.tintAlpha.toFixed(3)}|${app.renderer.width}x${app.renderer.height}`
+    if (key === lastTintKey) return
+    lastTintKey = key
     tintLayer.clear()
-    if (p.tintAlpha > 0) {
+    if (sample.tintAlpha > 0.001) {
       tintLayer
         .rect(0, 0, app.renderer.width, app.renderer.height)
-        .fill({ color: p.tint, alpha: p.tintAlpha })
+        .fill({ color: sample.tint, alpha: sample.tintAlpha })
     }
   }
 
   const resize = (width: number, height: number) => {
     app.renderer.resize(width, height)
     centerWorld(app, world)
+    lastTintKey = ''
   }
 
   const destroy = () => {
@@ -43,7 +47,7 @@ export function buildScene(app: Application): Scene {
     tintLayer.destroy()
   }
 
-  return { setPhase, resize, destroy }
+  return { applyPalette, resize, destroy }
 }
 
 function drawDistrict(parent: Container, d: District): void {
